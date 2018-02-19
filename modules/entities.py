@@ -9,7 +9,7 @@ from modules.exceptions import ManifestNotFoundException
 
 class Csv(object):
 
-    def __init__(self, csv_path='crashes.csv'):
+    def __init__(self, csv_path=config.CRASH_LIST):
         if os.path.exists('crashes.csv'):
             self.csvfile = open(csv_path, 'a', newline='')
         else:

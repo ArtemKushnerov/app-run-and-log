@@ -3,7 +3,7 @@ import os
 import sys
 
 from modules import shellhelper
-from modules.entities import Csv, csv
+from modules.report_handler import Status
 from modules.exceptions import AbsentActivityException, UserExitException
 
 
@@ -24,15 +24,15 @@ def read_status_from_experimenter():
         key = wait_key()
     if key == 'e':
         raise UserExitException()
-    return key
 
+    status, reason = None, None
+    if key == 's':
+        status = Status.SUCCESS
+    elif key == 'c':
+        status = Status.FAIL
+        reason = 'CRASHED'
+    return status, reason
 
-def report_status(app, status):
-    csv.write_row(app, status)
-
-
-def close_crash_report():
-    csv.close()
 
 
 def wait_key():

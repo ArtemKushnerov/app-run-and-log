@@ -106,3 +106,5 @@ ENV/
 modules/config.py
 crashes.csv
 done_list.txt
+
+times_log.csv

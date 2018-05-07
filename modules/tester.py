@@ -1,15 +1,14 @@
 from modules import shellhelper, agent
 from modules.decorators import log
-from modules.done_list_handler import list_handler, Status
+from modules.report_handler import report_handler, Status
 
 
 class Tester:
     def __init__(self, apk):
         self.apk = apk
 
-    @log('WRITE SUCCESS')
-    def write_success(self):
-        list_handler.write(self.apk.name, Status.SUCCESS)
+    def write_status(self, status, reason):
+        report_handler.write(self.apk.name, status, reason)
 
     @log('UNINSTALL')
     def uninstall(self):
@@ -17,8 +16,8 @@ class Tester:
 
     @log('REPORT')
     def report_status(self):
-        status = agent.read_status_from_experimenter()
-        agent.report_status(self.apk.package, status)
+        status, reason = agent.read_status_from_experimenter()
+        return status, reason
 
     @log('RUN ACTIVITY')
     def run(self):
@@ -32,8 +31,8 @@ class Tester:
     def test(self):
         self.install()
         self.run()
-        self.report_status()
+        status, reason = self.report_status()
+        self.write_status(status, reason)
         self.uninstall()
-        self.write_success()
 
 

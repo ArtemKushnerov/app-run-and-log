@@ -1,5 +1,6 @@
 import logging
 import subprocess
+import psutil
 
 from modules import config
 from modules.exceptions import AbsentPackageException, ErrorInstallingException, ErrorUninstallingException, NotEnoughSpaceException
@@ -8,11 +9,11 @@ from modules.exceptions import AbsentPackageException, ErrorInstallingException,
 def install(new_apk_path):
     cmd = '"%s" install -r "%s"' % (config.ADB_PATH, new_apk_path)
     try:
-        out = request_pipe(cmd)
-    except Exception as e:
+        out = run(cmd)
+    except subprocess.CalledProcessError as e:
         if 'not enough space' in str(e):
             raise NotEnoughSpaceException()
-        raise ErrorInstallingException
+        raise ErrorInstallingException(e.output.decode('utf-8'))
     if 'Exception occurred while dumping' in out:
         raise ErrorUninstallingException
 
@@ -51,6 +52,15 @@ def request_pipe(cmd):
 Out: %s\nError: %s" % (out, err))
 
     return res.decode('utf-8')
+
+
+def run(command):
+    out = subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
+    return out.decode('utf-8')
+
+
+def run_in_background(command):
+    return subprocess.Popen(command, shell=True)
 
 
 def start_activity_explicitly(package_name, activity_name):

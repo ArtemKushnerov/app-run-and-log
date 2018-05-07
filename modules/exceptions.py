@@ -1,25 +1,31 @@
-class AbsentActivityException(Exception):
+class RunAndLogException(Exception):
+    def __init__(self, cause=None):
+        self.cause = cause.strip()
+
+
+class AbsentActivityException(RunAndLogException):
     pass
 
 
-class ManifestNotFoundException(Exception):
+class ManifestNotFoundException(RunAndLogException):
     pass
 
 
-class UserExitException(Exception):
+class UserExitException(RunAndLogException):
     pass
 
 
-class AbsentPackageException(Exception):
+class AbsentPackageException(RunAndLogException):
     pass
 
 
-class ErrorInstallingException(Exception):
+class ErrorInstallingException(RunAndLogException):
     pass
 
 
-class ErrorUninstallingException(Exception):
+class ErrorUninstallingException(RunAndLogException):
     pass
 
-class NotEnoughSpaceException(Exception):
+
+class NotEnoughSpaceException(RunAndLogException):
     pass

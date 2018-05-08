@@ -1,6 +1,5 @@
 import logging
 import subprocess
-import psutil
 
 from modules import config
 from modules.exceptions import AbsentPackageException, ErrorInstallingException, ErrorUninstallingException, NotEnoughSpaceException

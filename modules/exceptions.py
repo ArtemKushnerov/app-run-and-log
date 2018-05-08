@@ -29,3 +29,6 @@ class ErrorUninstallingException(RunAndLogException):
 
 class NotEnoughSpaceException(RunAndLogException):
     pass
+
+class RemoveApkException(RunAndLogException):
+    pass

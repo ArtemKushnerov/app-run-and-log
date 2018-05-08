@@ -1,16 +1,25 @@
 import glob
 import os
+from enum import Enum, auto
 
 from bbox.AndroidManifest import AndroidManifest
-from modules import config, shellhelper
+from modules import config, shell
 from modules.exceptions import ManifestNotFoundException
 
+class Type(Enum):
+    ORIGINAL = auto()
+    INSTRUMENTED = auto()
+
 class Apk:
-    def __init__(self, name):
-        self.path = os.path.join(config.TEST_REPOSITORY, name)
+    def __init__(self, name, type):
+        if type == Type.ORIGINAL:
+            self.path = os.path.join(config.APK_REPOSITORY, name)
+        elif type == Type.INSTRUMENTED:
+            self.path = os.path.join(config.TEST_REPOSITORY, name)
         self.name = name
-        self.package = shellhelper.get_package(self.path)
+        self.package = shell.get_package(self.path)
         self.manifest = None
+        self.type = type
 
     def init_manifest(self):
         sources_path = os.path.join(config.SOURCES_REPOSITORY, self.name.split('.apk')[0])

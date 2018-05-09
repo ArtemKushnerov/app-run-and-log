@@ -24,7 +24,7 @@ class ContinueException(Exception):
 def main():
     logging.info("START EXPERIMENT")
     apks = set(f for f in os.listdir(config.TEST_REPOSITORY) if f.endswith('.apk'))
-    processed_apks = report_handler.get_processed_apks()
+    processed_apks = set([apk + '.apk' for apk in report_handler.get_processed_apks()])
     apps_to_process = apks - processed_apks
     overall_apps = len(apks)
     counter = len(processed_apks)
@@ -45,6 +45,7 @@ def main():
                         logging.debug('time:' + str(time))
                         result[apk.type] = time
                     except Exception as e:
+                        tester.remove_apk()
                         logging.exception(f'{apk.package}, {apk.type}: {str(e)}')
                         raise ContinueException
                     finally:
